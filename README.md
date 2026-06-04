@@ -2,8 +2,11 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="Dashboard interativo de Vendas e Resgates - Sorrifácil">
 <title>Dashboard — Sorrifácil Tubarão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
@@ -44,6 +47,7 @@
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
+
 body { 
   font-family:'DM Sans',sans-serif; 
   background-color: var(--bg);
@@ -54,6 +58,23 @@ body {
   color:var(--text); 
   padding: 0 0 40px 0; 
   min-height: 100vh;
+  overflow-x: hidden; /* Evita rolagem horizontal indesejada no GitHub Pages */
+}
+
+/* ── CUSTOM SCROLLBAR (Para não quebrar o visual Dark) ── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
 /* ── NAVEGAÇÃO SUPERIOR (TABS) ── */
@@ -61,7 +82,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(5, 5, 7, 0.8);
+  background: rgba(5, 5, 7, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
@@ -115,13 +136,13 @@ body {
 }
 
 /* ── HEADER ── */
-.header { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; padding-bottom:20px; border-bottom:1px solid var(--border); }
-.logo { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:20px; color:#fff; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.header { display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; padding-bottom:20px; border-bottom:1px solid var(--border); flex-wrap: wrap; gap: 16px; }
+.logo { width:52px; height:52px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-family:'Syne',sans-serif; font-weight:800; font-size:20px; color:#fff; box-shadow: 0 8px 24px rgba(0,0,0,0.4); flex-shrink: 0; }
 .logo.vendas { background:linear-gradient(135deg,var(--blue),var(--accent)); }
 .logo.resgates { background:linear-gradient(135deg,var(--orange),var(--red)); }
 .htitle { font-family:'Syne',sans-serif; font-size:24px; font-weight:800; letter-spacing: -0.5px; }
 .hsub { font-size:13px; color:var(--muted); margin-top:4px; font-weight: 500; }
-.hbadge { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 16px; font-size:13px; color:var(--muted); backdrop-filter: blur(10px); }
+.hbadge { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 16px; font-size:13px; color:var(--muted); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .hbadge strong { color:var(--text); font-weight: 700; }
 
 /* ── SECTION LABEL ── */
@@ -160,6 +181,7 @@ body {
   border-radius: 18px; 
   padding: 24px; 
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 .card:hover {
   border-color: var(--border-light);
@@ -186,7 +208,8 @@ body {
 .extremo-v { font-weight: 700; font-size: 13px; }
 
 /* ── TABLE GERAL ── */
-table { width:100%; border-collapse:collapse; font-size:13px; }
+.table-wrapper { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
+table { width:100%; border-collapse:collapse; font-size:13px; min-width: 600px; } /* Min-width para manter as tabelas legíveis */
 th { font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; font-weight:700; padding:12px 10px; border-bottom: 2px solid var(--border); white-space:nowrap; }
 td { padding: 12px 10px; border-bottom: 1px solid var(--border); transition: background 0.2s; }
 tbody tr:hover td { background: rgba(255,255,255,0.02); }
@@ -200,7 +223,7 @@ tbody tr:last-child td { border-bottom: none; }
 .faixa-bar { height:100%; border-radius:4px; display:flex; align-items:center; padding-left:10px; font-size:11px; font-weight:800; color:#fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
 /* ── PILL ── */
-.pill { display:inline-flex; align-items:center; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; text-transform: uppercase; letter-spacing: 0.5px; }
+.pill { display:inline-flex; align-items:center; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
 .pill-g { background:rgba(27,214,101,.15); color:var(--green); border: 1px solid rgba(27,214,101,.3); }
 .pill-y { background:rgba(255,207,84,.15); color:var(--accent3); border: 1px solid rgba(255,207,84,.3); }
 .pill-r { background:rgba(244,63,94,.15); color:var(--red); border: 1px solid rgba(244,63,94,.3); }
@@ -233,7 +256,7 @@ tbody tr:last-child td { border-bottom: none; }
 .row-sub td { padding:6px 10px; font-size:13px; }
 .row-sub td:first-child { padding-left:24px; color:var(--muted); }
 .row-total td { padding:14px 10px; font-weight:800; background:rgba(255,255,255,0.03); border-top:1px solid rgba(255,255,255,0.15); border-bottom:1px solid rgba(255,255,255,0.15); font-family: 'Syne', sans-serif; font-size: 14px;}
-.tipo-chip { display:inline-flex; align-items:center; gap:6px; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:700; letter-spacing: 0.5px; text-transform: uppercase; }
+.tipo-chip { display:inline-flex; align-items:center; gap:6px; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:700; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; }
 .chip-int { background:rgba(180,151,250,.15); color:var(--accent4); border: 1px solid rgba(180,151,250,0.3); }
 .chip-man { background:rgba(0,229,181,.15); color:var(--accent); border: 1px solid rgba(0,229,181,0.3); }
 .chip-tot { background:rgba(255,255,255,.1); color:var(--text); border: 1px solid rgba(255,255,255,0.2); }
@@ -245,6 +268,34 @@ tbody tr:last-child td { border-bottom: none; }
 .kpi:nth-child(3) { animation-delay: 0.15s; }
 .kpi:nth-child(4) { animation-delay: 0.2s; }
 .kpi:nth-child(5) { animation-delay: 0.25s; }
+
+/* ── RESPONSIVIDADE PARA GIT/MOBILE ── */
+@media (max-width: 1200px) {
+  .kpi-strip { grid-template-columns: repeat(3, 1fr); }
+  .g4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 992px) {
+  .kpi-strip { grid-template-columns: repeat(2, 1fr); }
+  .g3, .g52, .g53, .g35 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  body { padding: 0 0 20px 0; }
+  .view { padding: 16px; }
+  .g2, .kpi-strip, .g4 { grid-template-columns: 1fr; }
+  .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+  .top-nav { flex-direction: column; align-items: stretch; padding: 12px; }
+  .tab-btn { justify-content: center; }
+  .hbadge { width: 100%; text-align: center; }
+  
+  /* Ajuste de tabelas para celular */
+  .row-canal td { font-size: 12px; }
+  
+  .val-row { flex-wrap: wrap; }
+  .val-lbl { width: 100%; margin-bottom: 4px; }
+  .val-row > div:nth-child(2) { text-align: left !important; }
+}
 </style>
 </head>
 <body>
@@ -382,7 +433,7 @@ tbody tr:last-child td { border-bottom: none; }
 
   <div style="margin-top:16px" class="card">
     <div class="ctitle"><span class="cdot" style="background:var(--blue); color:var(--blue)"></span>Comparativo Direto — Integração vs. Manual</div>
-    <div style="overflow-x:auto">
+    <div class="table-wrapper">
       <table>
         <thead>
           <tr>
@@ -437,7 +488,7 @@ tbody tr:last-child td { border-bottom: none; }
   <div class="sec">Origem dos Leads — por Canal</div>
   <div class="card">
     <div class="ctitle"><span class="cdot" style="background:var(--pink); color:var(--pink)"></span>Performance por Canal — Integração vs. Manual</div>
-    <div style="overflow-x:auto">
+    <div class="table-wrapper">
     <table style="border-collapse: collapse;">
       <thead>
         <tr>
@@ -647,7 +698,7 @@ tbody tr:last-child td { border-bottom: none; }
     </div>
 
     <!-- INSIGHTS -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:24px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:16px;margin-top:24px">
       <div class="ibox" style="background:rgba(180,151,250,.08);border:1px solid rgba(180,151,250,.2); margin-top:0;">
         <span style="font-size:18px">🤖</span>
         <div><strong>Instagram via Integração</strong> tem a pior conversão: 20%. 10 leads, só 2 fechados, R$ 95k de pipeline represado.</div>
@@ -697,7 +748,7 @@ tbody tr:last-child td { border-bottom: none; }
     <!-- FAIXA ETÁRIA -->
     <div class="card">
       <div class="ctitle"><span class="cdot" style="background:var(--accent3); color:var(--accent3)"></span>Faixa Etária — Receita &amp; Ticket</div>
-      <div style="overflow-x:auto">
+      <div class="table-wrapper">
         <table>
           <thead>
             <tr>
@@ -763,7 +814,7 @@ tbody tr:last-child td { border-bottom: none; }
     <!-- MUNICÍPIOS -->
     <div class="card">
       <div class="ctitle"><span class="cdot" style="background:var(--orange); color:var(--orange)"></span>Municípios</div>
-      <div style="overflow-x:auto">
+      <div class="table-wrapper">
         <table>
           <thead>
             <tr>
@@ -981,7 +1032,7 @@ tbody tr:last-child td { border-bottom: none; }
   <div class="sec">Análise por Especialidade</div>
   <div class="card">
     <div class="ctitle"><span class="cdot" style="background:var(--accent)"></span>Performance por Especialidade</div>
-    <div style="overflow-x:auto">
+    <div class="table-wrapper">
     <table>
       <thead>
         <tr>
