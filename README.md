@@ -252,14 +252,21 @@ tbody tr:last-child td { border-bottom: none; }
 .extremo-val { font-family:'Syne',sans-serif; font-size:28px; font-weight:800; line-height:1; margin-bottom:6px; letter-spacing:-0.5px; }
 
 /* Específicos Tabela Canais */
-.row-canal td { padding:16px 10px 8px; font-family:'Syne',sans-serif; font-size:14px; font-weight:800; border-top:1px solid rgba(255,255,255,0.1); }
-.row-sub td { padding:6px 10px; font-size:13px; }
-.row-sub td:first-child { padding-left:24px; color:var(--muted); }
-.row-total td { padding:14px 10px; font-weight:800; background:rgba(255,255,255,0.03); border-top:1px solid rgba(255,255,255,0.15); border-bottom:1px solid rgba(255,255,255,0.15); font-family: 'Syne', sans-serif; font-size: 14px;}
-.tipo-chip { display:inline-flex; align-items:center; gap:6px; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:700; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; }
-.chip-int { background:rgba(180,151,250,.15); color:var(--accent4); border: 1px solid rgba(180,151,250,0.3); }
-.chip-man { background:rgba(0,229,181,.15); color:var(--accent); border: 1px solid rgba(0,229,181,0.3); }
-.chip-tot { background:rgba(255,255,255,.1); color:var(--text); border: 1px solid rgba(255,255,255,0.2); }
+.row-canal td { padding: 16px 10px 8px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; border-top: 1px solid rgba(255,255,255,0.1); }
+.row-sub td { padding: 6px 10px; font-size: 13px; }
+.row-sub td:first-child { padding-left: 24px; color: var(--muted); }
+.row-total td { padding: 14px 10px; font-weight: 800; background: rgba(255,255,255,0.03); border-top: 1px solid rgba(255,255,255,0.15); border-bottom: 1px solid rgba(255,255,255,0.15); font-family: 'Syne', sans-serif; font-size: 14px;}
+.tipo-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.chip-int { background: rgba(180,151,250,.15); color: var(--accent4); border: 1px solid rgba(180,151,250,0.3); }
+.chip-man { background: rgba(0,229,181,.15); color: var(--accent); border: 1px solid rgba(0,229,181,0.3); }
+.chip-tot { background: rgba(255,255,255,.1); color: var(--text); border: 1px solid rgba(255,255,255,0.2); }
+
+/* Ajuste Fundo Transparente para Tabelas */
+table { width: 100%; border-collapse: collapse; font-size: 13px; background-color: transparent; color: var(--text); }
+th { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; padding: 12px 10px; border-bottom: 2px solid var(--border); white-space: nowrap; background-color: transparent; }
+td { padding: 12px 10px; border-bottom: 1px solid var(--border); transition: background 0.2s; background-color: transparent; }
+tbody tr:hover td { background: rgba(255,255,255,0.02); }
+tbody tr:last-child td { border-bottom: none; }
 
 @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
 .kpi, .card { animation:fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
